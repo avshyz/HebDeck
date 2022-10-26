@@ -1,0 +1,10 @@
+{
+  "name": "hebdeck",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "avishay-gs <avishay@grip.security>",
+  "license": "MIT",
+  "dependencies": {
+    "puppeteer": "^19.2.0"
+  }
+}

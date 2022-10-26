@@ -1,0 +1,12 @@
+{
+  "configurations": [
+    {
+      "type": "command",
+      "name": "scrape",
+      "program": "node",
+      "args": [
+        "./runner"
+      ]
+    }
+  ]
+}
