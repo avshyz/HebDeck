@@ -4,7 +4,7 @@ const {scrape} = require('./conjugator');
 
 const urls = [
     {
-        deck: "1. Strong Verbs",
+        deck: "Strong Verbs",
         urls: [
             'https://www.pealim.com/dict/2761-lichbod/',
             "https://www.pealim.com/dict/1-lichtov/",
@@ -13,6 +13,63 @@ const urls = [
             "https://www.pealim.com/dict/959-lehachtiv/",
             "https://www.pealim.com/dict/2766-lechatev/"
         ]
+    },
+    {
+        deck: "Verba Primae Laringalis",
+        urls: [
+            "https://www.pealim.com/dict/51-laavod/",
+            "https://www.pealim.com/dict/6034-lehearetz/", // TODO ASK MARIE
+            "https://www.pealim.com/dict/1437-lehaavid/",
+
+            "https://www.pealim.com/dict/700-lachshov/",
+            "https://www.pealim.com/dict/701-lehechashev/",
+        ]
+    },
+    {
+        deck: "Verba Mediae Laryngalis und Mediae R",
+        urls: [
+            "https://www.pealim.com/dict/266-lehitbarech/",
+            "https://www.pealim.com/dict/39-lishol/",
+            "https://www.pealim.com/dict/47-lehishaer/",
+            "https://www.pealim.com/dict/265-levarech/",
+            "https://www.pealim.com/dict/1029-lemaher/"
+        ]
+    },
+    {
+        deck: "Verba Tertiae Laryngalis",
+        urls: [],
+    },
+    {
+        deck: "Verba Primae Aleph",
+        urls: [],
+    },
+    {
+        deck: "Verba Primae Nun",
+        urls: [],
+    },
+    {
+        deck: "Verba Primae Jod / Waw",
+        urls: [],
+    },
+    {
+        deck: "Halach",
+        urls: [],
+    },
+    {
+        deck: "Verba Mediae Geminatae",
+        urls: [],
+    },
+    {
+        deck: "Verba Mediae uio",
+        urls: [],
+    },
+    {
+        deck: "Verba tertiae Infirmae",
+        urls: [],
+    },
+    {
+        deck: "Verba tertiae Aleph",
+        urls: [],
     }
 ];
 
@@ -27,7 +84,8 @@ const urls = [
 
     await page.exposeFunction("scrape", scrape);
 
-    await Promise.all(urls.map(async ({deck, urls}) => {
+    await Promise.all(urls.map(async ({deck, urls}, index) => {
+        console.log(deck)
         let data = [];
 
         for (const url of urls) {
@@ -37,9 +95,14 @@ const urls = [
             data = [...data, ...pageData]
         }
 
+        const deckIndex = (index + 1).toLocaleString('en-US', {
+            minimumIntegerDigits: 2,
+            useGrouping: false
+        })
+
         fs.writeFileSync(
-            `results/${deck.split(". ")[1]}.csv`,
-            `#notetype:HebrewConjugations\n#deck:Hebrew Conjugations::${deck}\n${data.map(row => row.join(";"))
+            `results/${deck}.csv`,
+            `#notetype:HebrewConjugations\n#deck:Hebrew Conjugations::${deckIndex} ${deck}\n${data.map(row => row.join(";"))
                 .sort((a, b) => b.length - a.length)
                 .join("\n")}`
         )
