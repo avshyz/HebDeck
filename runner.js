@@ -1,7 +1,6 @@
 const puppeteer = require('puppeteer')
 const fs = require('fs')
-const path = require('path')
-const {scrape} = require('./conjugatorv2');
+const {scrape} = require('./conjugator');
 
 const urls = [
     {
