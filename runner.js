@@ -4,8 +4,17 @@ const path = require('path')
 const {scrape} = require('./conjugatorv2');
 
 const urls = [
-    "https://www.pealim.com/dict/1-lichtov/",
-    'https://www.pealim.com/dict/2761-lichbod/'
+    {
+        deck: "1. Strong Verbs",
+        urls: [
+            'https://www.pealim.com/dict/2761-lichbod/',
+            "https://www.pealim.com/dict/1-lichtov/",
+            "https://www.pealim.com/dict/958-lehikatev/",
+            "https://www.pealim.com/dict/960-lehitkatev/",
+            "https://www.pealim.com/dict/959-lehachtiv/",
+            "https://www.pealim.com/dict/2766-lechatev/"
+        ]
+    }
 ];
 
 (async () => {
@@ -19,17 +28,23 @@ const urls = [
 
     await page.exposeFunction("scrape", scrape);
 
-//    await page.goto('https://www.pealim.com/dict/1-lichtov/')
-    await page.goto('https://www.pealim.com/dict/2761-lichbod/')
-    const data = await page.evaluate(scrape);
-    console.log(data);
+    await Promise.all(urls.map(async ({deck, urls}) => {
+        let data = [];
 
-    fs.writeFileSync(
-        "result.csv",
-        data.map(row => row.join(";"))
-            .sort((a, b) => b.length - a.length)
-            .join("\n")
-    )
+        for (const url of urls) {
+            await page.goto(url);
+            const pageData = await page.evaluate(scrape);
+            console.log(`${url}: ${pageData.length}`)
+            data = [...data, ...pageData]
+        }
+
+        fs.writeFileSync(
+            `results/${deck.split(". ")[1]}.csv`,
+            `#notetype:HebrewConjugations\n#deck:Hebrew Conjugations::${deck}\n${data.map(row => row.join(";"))
+                .sort((a, b) => b.length - a.length)
+                .join("\n")}`
+        )
+    }));
 
     browser.close()
 })()
