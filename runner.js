@@ -2,7 +2,7 @@ const puppeteer = require('puppeteer')
 const fs = require('fs')
 const {scrape} = require('./conjugator');
 
-const urls = [
+const nouns = [
     {
         deck: "Strong Verbs",
         urls: [
@@ -35,56 +35,56 @@ const urls = [
             "https://www.pealim.com/dict/1029-lemaher/"
         ]
     },
-    {
-        deck: "Verba Tertiae Laryngalis",
-        urls: [],
-    },
-    {
-        deck: "Verba Primae Aleph",
-        urls: [],
-    },
-    {
-        deck: "Verba Primae Nun",
-        urls: [],
-    },
-    {
-        deck: "Verba Primae Jod / Waw",
-        urls: [],
-    },
-    {
-        deck: "Halach",
-        urls: [],
-    },
-    {
-        deck: "Verba Mediae Geminatae",
-        urls: [],
-    },
-    {
-        deck: "Verba Mediae uio",
-        urls: [],
-    },
-    {
-        deck: "Verba tertiae Infirmae",
-        urls: [],
-    },
-    {
-        deck: "Verba tertiae Aleph",
-        urls: [],
-    }
+//    {
+//        deck: "Verba Tertiae Laryngalis",
+//        urls: [],
+//    },
+//    {
+//        deck: "Verba Primae Aleph",
+//        urls: [],
+//    },
+//    {
+//        deck: "Verba Primae Nun",
+//        urls: [],
+//    },
+//    {
+//        deck: "Verba Primae Jod Waw",
+//        urls: [],
+//    },
+//    {
+//        deck: "Halach",
+//        urls: [],
+//    },
+//    {
+//        deck: "Verba Mediae Geminatae",
+//        urls: [],
+//    },
+//    {
+//        deck: "Verba Mediae uio",
+//        urls: [],
+//    },
+//    {
+//        deck: "Verba tertiae Infirmae",
+//        urls: [],
+//    },
+//    {
+//        deck: "Verba tertiae Aleph",
+//        urls: [],
+//    }
 ];
 
 (async () => {
     const browser = await puppeteer.launch({
-        headless: false,
+        headless: true,
         devtools: true,
-        args: ['--no-sandbox', '--user-data-dir="/tmp/chromium"', '--disable-web-security', '--disable-features=site-per-process']
+        args: ['--no-sandbox', '--disable-web-security', '--disable-features=site-per-process']
     })
     const page = await browser.newPage()
     await page.setViewport({width: 1200, height: 800});
 
     await page.exposeFunction("scrape", scrape);
 
-    await Promise.all(urls.map(async ({deck, urls}, index) => {
+    for (const [index, {deck, urls}] of nouns.entries()) {
         console.log(deck)
         let data = [];
 
@@ -106,7 +106,6 @@ const urls = [
                 .sort((a, b) => b.length - a.length)
                 .join("\n")}`
         )
-    }));
-
+    }
     browser.close()
 })()
