@@ -1,27 +1,35 @@
-
 const puppeteer = require('puppeteer')
 const fs = require('fs')
 const path = require('path')
-const { promisify } = require('util')
+const {scrape} = require('./conjugatorv2');
 
-const readFileAsync = promisify(fs.readFile)
-const writeFileAsync = promisify(fs.writeFile);
+const urls = [
+    "https://www.pealim.com/dict/1-lichtov/",
+    'https://www.pealim.com/dict/2761-lichbod/'
+];
+
 (async () => {
-    const browser = await puppeteer.launch({})
+    const browser = await puppeteer.launch({
+        headless: false,
+        devtools: true,
+        args: ['--no-sandbox', '--user-data-dir="/tmp/chromium"', '--disable-web-security', '--disable-features=site-per-process']
+    })
     const page = await browser.newPage()
-    await page.setViewport({ width: 1200, height: 800 })
+    await page.setViewport({width: 1200, height: 800});
 
-    await page.goto('https://checklyhq.com/')
-    const imageHref = await page.evaluate((sel) => {
-        return document.querySelector(sel).getAttribute('src').replace('/', '')
-    }, '.hero-image')
+    await page.exposeFunction("scrape", scrape);
 
-    const viewSource = await page.goto('https://checklyhq.com/' + imageHref)
-    const buffer = await viewSource.buffer()
-    await writeFileAsync(path.join(__dirname, 'checkly.png'), buffer)
-    console.log('The file was saved!')
+//    await page.goto('https://www.pealim.com/dict/1-lichtov/')
+    await page.goto('https://www.pealim.com/dict/2761-lichbod/')
+    const data = await page.evaluate(scrape);
+    console.log(data);
 
-    await readFileAsync(path.join(__dirname, 'checkly.png'))
-    console.log('The file was read!')
+    fs.writeFileSync(
+        "result.csv",
+        data.map(row => row.join(";"))
+            .sort((a, b) => b.length - a.length)
+            .join("\n")
+    )
+
     browser.close()
 })()
