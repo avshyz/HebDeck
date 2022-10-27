@@ -68,8 +68,7 @@ function scrape() {
                     x
                         .parentElement
                         .parentElement.innerHTML
-                        .replaceAll("*", "")
-                        .replaceAll("!", "")
+                        .replace(/[^0-9a-z\u0591-\u05BD\u05BF-\u05C2\u05C4-\u05C7א-ת/<>]/gi, '')
                 )
                 .join("<br>")
 
