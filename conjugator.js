@@ -68,7 +68,7 @@ function scrape() {
                     x
                         .parentElement
                         .parentElement.innerHTML
-                        .replace(/[^0-9a-z\u0591-\u05BD\u05BF-\u05C2\u05C4-\u05C7א-ת/<>]/gi, '')
+                        .replace(/[^0-9a-z\u0591-\u05BD\u05BF-\u05C2\u05C4-\u05C7א-ת/<> =\"\']/gi, '')
                 )
                 .join("<br>")
 
@@ -82,7 +82,7 @@ function scrape() {
                 root.textContent.replace("Root: ", ""),
                 transformGizra(gizra.textContent.replace("Verb – ", "").toLowerCase(), isPassive),
                 special.map(x => x.textContent).join("<br>").replace("This root does not have any special conjugation properties.", "").replace(";", "."),
-                tense,
+                tense.trim(),
                 meaning
             ];
         })

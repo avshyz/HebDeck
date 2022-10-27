@@ -36,6 +36,11 @@ describe('Conjugator', function () {
             pageData = await page.evaluate(scrape);
         });
 
+        test('Should parse verb correctly - sanity', async () => {
+            const a = pageData.find((d) => d[IDX.tense] === "Imperfect 2nd ♀️ Plural")
+            expect(a[IDX.verb]).toEqual("<div><span class=\"menukad\">תִּשְׁתַּלַּחְנָה</span></div><div class=\"transcription\">tishtal<b>a</b>chna</div>");
+        });
+
         test('Should handle rlm and exclamation marks', async () => {
             const a = pageData.find((d) => d[IDX.tense] === "Perfect 3rd ♂️ Sing.");
             const b = pageData.find((d) => d[IDX.tense] === "Imperative 2nd ♂️ Sing.")
