@@ -63,7 +63,15 @@ function scrape() {
     const res = Array.from(document.querySelectorAll(".conjugation-table .conj-td"))
         .map(x => {
             x.querySelector(".hidden")?.remove();
-            const verb = Array.from(x.querySelectorAll("div .menukad")).map(x => x.parentElement.parentElement.innerHTML.replace("*", "")).join("<br>")
+            const verb = Array.from(x.querySelectorAll("div .menukad"))
+                .map(x =>
+                    x
+                        .parentElement
+                        .parentElement.innerHTML
+                        .replaceAll("*", "")
+                        .replaceAll("!", "")
+                )
+                .join("<br>")
 
             const [tense, isPassive] = transformTense(x.querySelector("div").id);
             const meaning = x.querySelector("div .meaning").innerHTML;

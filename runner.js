@@ -35,10 +35,16 @@ const nouns = [
             "https://www.pealim.com/dict/1029-lemaher/"
         ]
     },
-//    {
-//        deck: "Verba Tertiae Laryngalis",
-//        urls: [],
-//    },
+    {
+        deck: "Verba Tertiae Laryngalis",
+        urls: [
+            "https://www.pealim.com/dict/2220-lishloach/",
+            "https://www.pealim.com/dict/2221-lehishaleach/",
+            "https://www.pealim.com/dict/2805-leshaleach/",
+            "https://www.pealim.com/dict/2222-lehishtaleach/",
+            "https://www.pealim.com/dict/2127-lehashbiach/" // TODO ASK MARIE
+        ],
+    },
 //    {
 //        deck: "Verba Primae Aleph",
 //        urls: [],
@@ -102,10 +108,11 @@ const nouns = [
 
         fs.writeFileSync(
             `results/${deck}.csv`,
-            `#notetype:HebrewConjugations\n#deck:Hebrew Conjugations::${deckIndex} ${deck}\n${data.map(row => row.join(";"))
+            `#notetype:HebrewConjugations\n#deck:Hebrew Conjugations::${deckIndex}. ${deck}\n${data.map(row => row.join(";"))
                 .sort((a, b) => b.length - a.length)
                 .join("\n")}`
         )
     }
-    browser.close()
+    browser.close();
+    console.log("DONE!")
 })()

@@ -5,6 +5,7 @@
   "author": "avishay-gs <avishay@grip.security>",
   "license": "MIT",
   "dependencies": {
+    "jest": "^29.2.2",
     "puppeteer": "^19.2.0"
   }
 }
