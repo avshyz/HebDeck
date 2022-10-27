@@ -15,7 +15,7 @@ const nouns = [
         ]
     },
     {
-        deck: "Verba Primae Laringalis",
+        deck: "Verba Primae Laryngalis",
         urls: [
             "https://www.pealim.com/dict/51-laavod/",
             "https://www.pealim.com/dict/6034-lehearetz/", // TODO ASK MARIE
