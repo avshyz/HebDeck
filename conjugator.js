@@ -56,12 +56,19 @@ function scrape() {
         return [`${tenseDisplayName?.[tense] ?? tense} ${normalized}`, !!passive]
     }
 
-    const [gizra, root, ...special] = Array.from(document.querySelectorAll('.container p'));
+    const [gizra, root, ...specialDiv] = Array.from(document.querySelectorAll('.container p'));
+    const generalSpecialNote = specialDiv
+        .map(x => x.textContent)
+        .join("<br>")
+        .replace("This root does not have any special conjugation properties.", "")
+        .replace(";", ".");
 
     const dupBank = {}
     const dupBankMeaning = {}
     const res = Array.from(document.querySelectorAll(".conjugation-table .conj-td"))
         .map(x => {
+            const conjugatedSpecialNote = x.querySelector(".hidden")?.innerHTML.replace(";", "") ?? ""
+
             x.querySelector(".hidden")?.remove();
             const verb = Array.from(x.querySelectorAll("div .menukad"))
                 .map(x =>
@@ -85,7 +92,7 @@ function scrape() {
                 verb,
                 root.textContent.replace("Root: ", ""),
                 transformGizra(gizra.textContent.replace("Verb – ", "").toLowerCase(), isPassive),
-                special.map(x => x.textContent).join("<br>").replace("This root does not have any special conjugation properties.", "").replace(";", "."),
+                `${conjugatedSpecialNote}${conjugatedSpecialNote.length > 0 && generalSpecialNote.length > 0 ? "<br>" : ""}${generalSpecialNote}`,
                 tense.trim(),
                 meaning,
                 onlyHebrew
