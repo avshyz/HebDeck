@@ -6,9 +6,10 @@ IDX = {
     stamm: 2,
     tense: 4,
 
-    hideReverse: 6,
-    additionalTense: 7,
-    additionalMeanings: 8
+    onlyHebrew: 6,
+    hideReverse: 7,
+    additionalTense: 8,
+    additionalMeanings: 9
 }
 
 jest.setTimeout(15000);
@@ -18,7 +19,7 @@ describe('Conjugator', function () {
     let page;
     beforeAll(async () => {
         browser = await puppeteer.launch({
-            headless: false,
+            headless: true,
             devtools: true,
             args: ['--no-sandbox', '--disable-web-security', '--disable-features=site-per-process']
         })
@@ -40,6 +41,19 @@ describe('Conjugator', function () {
             const a = pageData.find((d) => d[IDX.tense] === "Imperfect 2nd ♀️ Plural")
             expect(a[IDX.verb]).toEqual("<div><span class=\"menukad\">תִּשְׁתַּלַּחְנָה</span></div><div class=\"transcription\">tishtal<b>a</b>chna</div>");
         });
+
+        describe('HebrewOnly', function () {
+            test('Should handle multiple nikudim', async () => {
+                const a = pageData.find((d) => d[IDX.tense] === "Perfect 3rd ♂️ Sing.");
+                expect(a[IDX.onlyHebrew]).toEqual("הִשְׁתַּלֵּחַ, הִשְׁתַּלַּח");
+            })
+
+            test('Should handle special characters', async () => {
+                const a = pageData.find((d) => d[IDX.tense] === "Imperfect 2nd ♀️ Plural");
+                expect(a[IDX.onlyHebrew]).toEqual("תִּשְׁתַּלַּחְנָה");
+            })
+        });
+
 
         test('Should handle rlm and exclamation marks', async () => {
             const a = pageData.find((d) => d[IDX.tense] === "Perfect 3rd ♂️ Sing.");

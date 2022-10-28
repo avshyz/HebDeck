@@ -72,6 +72,10 @@ function scrape() {
                 )
                 .join("<br>")
 
+            const onlyHebrew = Array.from(x.querySelectorAll("div .menukad"))
+                .map(x => x.textContent.replace(/[^0-9a-z\u0591-\u05BD\u05BF-\u05C2\u05C4-\u05C7א-ת/]/gi, ''))
+                .join(", ")
+
             const [tense, isPassive] = transformTense(x.querySelector("div").id);
             const meaning = x.querySelector("div .meaning").innerHTML;
 
@@ -83,7 +87,8 @@ function scrape() {
                 transformGizra(gizra.textContent.replace("Verb – ", "").toLowerCase(), isPassive),
                 special.map(x => x.textContent).join("<br>").replace("This root does not have any special conjugation properties.", "").replace(";", "."),
                 tense.trim(),
-                meaning
+                meaning,
+                onlyHebrew
             ];
         })
 
